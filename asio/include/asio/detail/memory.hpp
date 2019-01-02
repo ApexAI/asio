@@ -54,9 +54,14 @@ using std::allocator_arg_t;
     struct uses_allocator<t, Allocator> : true_type {}; \
   } \
   /**/
+#if defined(QNX) && defined(_LIBCPP_HAS_NO_TEMPLATE_ALIASES)
+# define ASIO_REBIND_ALLOC(alloc, t) \
+  typename std::allocator_traits<alloc>::template rebind_alloc<t>::other
+#else // defined(QNX) && defined(_LIBCPP_HAS_NO_TEMPLATE_ALIASES)
 # define ASIO_REBIND_ALLOC(alloc, t) \
   typename std::allocator_traits<alloc>::template rebind_alloc<t>
   /**/
+#endif // defined(QNX) && defined (_LIBCPP_HAS_NO_TEMPLATE_ALIASES)
 #else // defined(ASIO_HAS_CXX11_ALLOCATORS)
 struct allocator_arg_t {};
 # define ASIO_USES_ALLOCATOR(t)
